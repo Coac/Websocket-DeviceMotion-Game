@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Simple Canvas Game</title>
+		<script>
+    "use strict";
+    // Initialize everything when the window finishes loading
+    window.addEventListener("load", function(event) {
+      var status = document.getElementById("status");
+      var url = document.getElementById("url");
+      var open = document.getElementById("open");
+      var send = document.getElementById("send");
+      var x = document.getElementById("x");
+      var y = document.getElementById("y");
+      var text = document.getElementById("text");
+      var message = document.getElementById("message");
+      var socket;
+
+      x.value = 0;
+      y.value = 0;
+
+      status.textContent = "Not Connected";
+      url.value = "ws://localhost:443";
+      send.disabled = true;
+
+      // Create the connexion
+	    open.disabled = true;
+	    socket = new WebSocket(url.value, "echo-protocol");
+
+	    socket.addEventListener("open", function(event) {
+	      send.disabled = false;
+	      status.textContent = "Connected";
+	    });
+
+	    var temp = "0*0";
+	    var coord = temp.split('*');
+	    // Display messages received from the server
+	    socket.addEventListener("message", function(event) {
+	      
+	      coord = event.data.split('*');
+	      x.value = coord[0];
+	      y.value = coord[1];
+	    });
+
+	    // Display any errors that occur
+	    socket.addEventListener("error", function(event) {
+	      message.textContent = "Error: " + event;
+	    });
+
+
+	    function update() {
+			socket.send("pos");
+
+			setInterval(requestAnimationFrame(update), 200);
+
+		}
+		setInterval(update, 100);
+
+      // Send text to the server when the Send button is clicked
+      send.addEventListener("click", function(event) {
+        
+        update();
+
+
+      });
+
+
+
+
+    });
+  </script>
+	</head>
+	<body>
+		<script src="js/game.js"></script>
+        <div id="log"> </div>
+
+		  Status: <span id="status"></span><br />
+		  URL: <input id="url" /><br />
+		  <input id="open" type="button" value="Connect" />&nbsp;
+		  <input id="send" type="button" value="Send" />&nbsp;
+		  <input id="text" /><br />
+		  <input id="x" /><br />
+		  <input id="y" /><br />
+
+		  <span id="message"></span>
+		  <span id="hp"></span>
+		  		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+	</body>
+</html>

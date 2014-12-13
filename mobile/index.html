@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+   <meta charset = "utf-8" />
+   <title>Mobile controller : Chalut Java</title>
+  </head>
+  <body>
+  	<div id="log"></div>	
+   <script>	
+   			var x = 0;
+			var y = 0;
+			var z = 0;
+		function process(event) {
+			x = event.accelerationIncludingGravity.x;
+			y = event.accelerationIncludingGravity.y;
+			z = event.accelerationIncludingGravity.z;
+			document.getElementById('log').innerHTML = "<ul><li>X : " + x + "</li><li>Y : " + y + "</li><li>Z : " + z + "</li></ul>";
+		}
+		
+		if(window.DeviceOrientationEvent) {
+		  window.addEventListener("devicemotion", process, false);
+		} else {
+		  document.getElementById('log').innerHTML = "<p>Votre browser ne supporte pas Device Motion API</p>";
+		}
+		
+
+
+
+
+		window.addEventListener("load", function(event) {
+     
+      var socket;
+
+	    socket = new WebSocket("ws://localhost:443", "echo-protocol");
+
+	    function update() {
+	    	if(x==null)
+			socket.send("0*0");
+		else
+			socket.send(x.toString().substring(0,4) + "*" + y.toString().substring(0,4));
+
+
+		setInterval(requestAnimationFrame(update),200);
+			
+
+		}
+
+
+      var send = document.getElementById("send");
+        send.addEventListener("click", function(event) {
+        send.value = "test";
+        update();
+      });
+
+      
+
+
+
+
+    });
+
+
+
+
+
+		</script>
+		<input id="send" type="button" value="Send" />&nbsp;
+  </body>
+</html>
