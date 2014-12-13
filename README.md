@@ -2,7 +2,9 @@ Websocket-DeviceMotion-Game
 ===========================
 
 Un jeu réalisé pendant la nuit de l'info 2014.
+
 Utilisation des Websocket, de l'api DeviceMotion et du Canvas2D.
+
 Jeu basé sur http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
 
 
